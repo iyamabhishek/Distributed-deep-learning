@@ -17,7 +17,7 @@ cuDNN | 7.6.5 or 8.0
 
 On Linux, simply `conda install tensorflow-gpu` and `conda install tensorflow-datasets`.
 
-On Windows, TF2.4 is not yet available on Anaconda. `pip install tensorflow-gpu`, `pip install tensorflow-datasets`. Then 'conda install cudatoolkit`, it should package CUDA Toolkit 10.2 and cuDNN 7.6.5.  
+On Windows, TF2.4 is not yet available on Anaconda. `pip install tensorflow-gpu`, `pip install tensorflow-datasets`. Then `conda install cudatoolkit`, it should package CUDA Toolkit 10.2 and cuDNN 7.6.5.  
 
 NOTE: If TF throws errors looking for CUDA 11, remove cuDNN and CUDA Toolkit, then use `conda install -c conda-forge cudnn==8.0.5.39`. This should install CUDA Toolkit 11.0 and cuDNN 8.0. I had a lot of issues with this, reach out if you have problems.
 
