@@ -10,20 +10,26 @@ Created on Fri Apr  2 09:42:14 2021
 import os
 os.environ["CUDA_VISIBLE_DEVICES"]="-1"
 
+import time
 import tensorflow as tf
 #import tensorflow_datasets as tfds
 #import numpy as np
 #import matplotlib.pyplot as plt
 
 ############################################################################### 
-
 #-- Debugging options.
 from tensorflow.python.client import device_lib
 print(str(device_lib.list_local_devices()))
 print('TF Found Devices: '+str(tf.config.list_physical_devices()))
 
 ###############################################################################
+#-- Run options
+num_epochs = 5
+
+###############################################################################
 #-- Dataset pipeline
+# Start a global timer
+start_time = time.perf_counter()
 # Load the dataset from local </datasets> directory.
 path_train = './datasets/TF_MNIST/train'
 path_test = './datasets/TF_MNIST/test'
@@ -83,8 +89,15 @@ model.compile(
     metrics=[tf.keras.metrics.SparseCategoricalAccuracy()]
 )
 
+start_train_time = time.perf_counter()
+
 model.fit(
     ds_train,
-    epochs=10,
+    epochs=num_epochs,
     validation_data=ds_test
 )
+
+end_time = time.perf_counter()
+
+print(f"Total train time: {end_time-start_train_time:0.4f} seconds")
+print(f"Total runtime: {end_time-start_time:0.4f} seconds")
