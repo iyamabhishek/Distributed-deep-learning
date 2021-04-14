@@ -24,7 +24,9 @@ print('TF Found Devices: '+str(tf.config.list_physical_devices()))
 
 ###############################################################################
 #-- Run options
-num_epochs = 5
+num_epochs = 10
+batch_size = 128
+learning_rate = 0.001
 
 ###############################################################################
 #-- Dataset pipeline
@@ -55,12 +57,13 @@ ds_train = ds_train.map(normalize_img,
 # Zero pad the data (for MNIST) from (28,28,1) to (32,32,1)
 ds_train = ds_train.map(pad_img,
                         num_parallel_calls=tf.data.experimental.AUTOTUNE)
+
 # If dataset fits in memory, cache it for better performance. NOTE: Perform random transformations after caching.
 ds_train = ds_train.cache()
 # Shuffle the data; set shuffle buffer >= dataset size.
 ds_train = ds_train.shuffle(100000)
 # Batch after shuffling to get unique batches at each epoch. Padded batch for MNIST to pad sizes to (32,32,1)
-ds_train = ds_train.batch(128)
+ds_train = ds_train.batch(batch_size)
 # Prefetch for performance boost
 ds_train = ds_train.prefetch(tf.data.experimental.AUTOTUNE)
 
@@ -70,23 +73,28 @@ ds_test = ds_test.map(normalize_img,
 # Zero pad the data (for MNIST) from (28,28,1) to (32,32,1)
 ds_test = ds_test.map(pad_img,
                       num_parallel_calls=tf.data.experimental.AUTOTUNE)
-ds_test = ds_test.batch(128)
+ds_test = ds_test.batch(batch_size)
 # Cache after batching since we don't need shuffling.
 ds_test = ds_test.cache()
 ds_test = ds_test.prefetch(tf.data.experimental.AUTOTUNE)
 
+
 ###############################################################################
 
 #-- Load a premade model.
-model = tf.keras.applications.ResNet50(include_top=False,       # Whether to include the fully-connected layer at the top of the network.
-                                       weights=None,            # Pretrained weight set to use. `None` cues random initialization.
-                                       input_shape=(32,32,1))   # Input shape. Minimum (32,32,1)
-                                       #classes=10)              # Number of classes to classify images into, only to be specified if `include_top` is True, and if no `weights` argument is specified.
+model = tf.keras.models.Sequential()
+
+model.add(tf.keras.applications.ResNet50(include_top=False,       # Whether to include the fully-connected layer at the top of the network.
+                                         weights=None,            # Pretrained weight set to use. `None` cues random initialization.
+                                         input_shape=(32,32,1),
+                                         pooling='avg'))   # Input shape. Minimum (32,32,1)
+
+model.add(tf.keras.layers.Dense(10, activation='softmax'))
 
 model.compile(
-    optimizer=tf.keras.optimizers.Adam(0.001),
-    loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-    metrics=[tf.keras.metrics.SparseCategoricalAccuracy()]
+    optimizer=tf.keras.optimizers.Adam(learning_rate),
+    loss='sparse_categorical_crossentropy',  # tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
+    metrics=['accuracy']  #tf.keras.metrics.SparseCategoricalAccuracy()
 )
 
 start_train_time = time.perf_counter()
