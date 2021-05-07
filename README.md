@@ -68,17 +68,19 @@ For ImageNet:
 2. Within that script, run `TF.py` with the appropriate flags for your desired job:
 
 User inputs:
-    --model         : 'ResNet50', 'ResNet152', 'DenseNet121', 'DenseNet201'
-    --dataset       : 'MNIST', 'ImageNet'
-    --data_path     : string, point to desired dataset
-    --num_epochs    : int, number of epochs to train
-    --batch_size    : int, batch size; recommend 128 for MNIST and 16 for ImageNet
-    --learning_rate : float, optimizer learning rate; default is fine for most use cases
-    --ignore_gpu    : 'True' or do not provide
-    --mGPU          : 'True' or do not provide
-    --mCPU          : 'True' or do not provide
-    --mWorker       : Not supported
-    --mWorkerGPU    : Not supported
+Input | Info 
+------------ | -------------  
+--model         | 'ResNet50', 'ResNet152', 'DenseNet121', 'DenseNet201'
+--dataset       | 'MNIST', 'ImageNet'
+--data_path     | string, point to desired dataset
+--num_epochs    | int, number of epochs to train
+--batch_size    | int, batch size; recommend 128 for MNIST and 16 for ImageNet
+--learning_rate | float, optimizer learning rate; default is fine for most use cases
+--ignore_gpu    | 'True' or do not provide
+--mGPU          | 'True' or do not provide
+--mCPU          | 'True' or do not provide
+--mWorker       | Not supported
+--mWorkerGPU    | Not supported
 
 
 ### Logging and Profiling
