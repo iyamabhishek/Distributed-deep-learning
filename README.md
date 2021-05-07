@@ -39,20 +39,27 @@ Use `./datasets/TF_dataset_loader.py` to prepare the MNIST and/or ImageNet for t
 NOTE: FOLLOW THESE INSTRUCTIONS. ImageNet does not play nice, and requires special instructions.
 
 For MNIST:
-    1. Define script variable `dataset_name` as 'MNIST'
-    2. Define script variable `path` as the directory you'd like it stored to, <MNIST_dir>
-    3. Run the script. It will download MNIST into `path` in the correct format, with `train` and `test` subdirectories
-    4. Move <MNIST_dir> to HPC, in desired location, and pass that location to `TF.py` when you run it.
+
+1. Define script variable `dataset_name` as 'MNIST'
+
+2. Define script variable `path` as the directory you'd like it stored to, <MNIST_dir>
+
+3. Run the script. It will download MNIST into `path` in the correct format, with `train` and `test` subdirectories
+
+4. Move <MNIST_dir> to HPC, in desired location, and pass that location to `TF.py` when you run it.
 
 For ImageNet:
-    1. Manually download `ILSVRC2012_img_train.tar` and `ILSVRC2012_img_val.tar` from image-net.org. You'll need ~150 gb memory.
-    2. Store them in `<imagenet_dir>/downloads/manual`, where <imagenet_dir> is a directory of your choice
-    3. Define script variable `dataset_name` as 'ImageNet'
-    4. Define script variable `path` as your <imagenet_dir> from step 2.
-    5. Run the script. It will unpack the tarballs, split them, shard them, and save them to `<imagenet_dir>/imagenet2012/5.1.0`
-       NOTE: This requires an additional ~150 gb of memory.
-    6. Move <imagenet_dir>/imagenet2012/5.1.0 and its contents to lustre on HPC. Maintain the file structure. New path should be
-       `<hpc_imagenet_dir>/imagenet2012/5.1.0>`. Note that location, and pass <hpc_imagenet_dir> to `TF.py` when you run it.
+1. Manually download `ILSVRC2012_img_train.tar` and `ILSVRC2012_img_val.tar` from image-net.org. You'll need ~150 gb memory.
+
+2. Store them in `<imagenet_dir>/downloads/manual`, where <imagenet_dir> is a directory of your choice
+
+3. Define script variable `dataset_name` as 'ImageNet'
+
+4. Define script variable `path` as your <imagenet_dir> from step 2.
+
+5. Run the script. It will unpack the tarballs, split them, shard them, and save them to `<imagenet_dir>/imagenet2012/5.1.0`. NOTE: This requires an additional ~150 gb of memory.
+
+6. Move <imagenet_dir>/imagenet2012/5.1.0 and its contents to lustre on HPC. Maintain the file structure. New path should be `<hpc_imagenet_dir>/imagenet2012/5.1.0>`. Note that location, and pass <hpc_imagenet_dir> to `TF.py` when you run it.
 
 #### II. Training the Network
 
