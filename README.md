@@ -27,11 +27,6 @@ NOTE: TF Datasets versioning is unclear. Pip is 4.2, anaconda is 1.2, they appea
 
 ### Usage
 
-To use the TensorFlow framework:
-
-2. Modify `./TF.py` to point to the desired dataset. Provide that dataset's `element_spec` to `TF.py` so it can load the data properly (annoying requirement of the experimental TF.Datasets save/load functions).
-3. Run `TF.py` to train, modifying parameters at will! Use `TF_submit_job.sh` as a template batch script for deepthought2 usage.
-
 #### I. Preparing the Data
 
 Use `./datasets/TF_dataset_loader.py` to prepare the MNIST and/or ImageNet for training. This script is used to download online tensorflow_datasets datasets into the local </datasets> directory. This must be done off of HPC, and then files manually transferred to HPC. HPC denies remote access to download datasets.
@@ -67,7 +62,6 @@ For ImageNet:
 
 2. Within that script, run `TF.py` with the appropriate flags for your desired job:
 
-User inputs:
 Input | Info 
 ------------ | -------------  
 --model         | 'ResNet50', 'ResNet152', 'DenseNet121', 'DenseNet201'
