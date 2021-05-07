@@ -1,2 +1,6 @@
 .spyproject
 datasets/TF_MNIST
+batch_jobs
+results
+*.sh
+*.out
