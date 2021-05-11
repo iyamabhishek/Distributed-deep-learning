@@ -10,7 +10,7 @@ Distributed training is supported.
 
 User inputs:
     --model         : 'ResNet50', 'ResNet152', 'DenseNet121', 'DenseNet201'
-    --dataset       : 'MNIST', 'ImageNet'
+    --dataset       : 'MNIST', 'ImageNet', 'ImageNet_subset'
     --data_path     : str
     --num_epochs    : int
     --batch_size    : int
@@ -18,12 +18,11 @@ User inputs:
     --ignore_gpu    : 'True' or do not provide
     --mGPU          : 'True' or do not provide
     --mCPU          : 'True' or do not provide
-    --mWorker       : Not supported
-    --mWorkerGPU    : Not supported
-
-TODO: FINISH DOCUMENTATION!
+    --mWorker       : Not yet supported
+    --mWorkerGPU    : Not yet supported
 
 """
+
 import os
 import time
 from argparse import ArgumentParser
@@ -128,26 +127,21 @@ if MULTI_CPU:
 
     # Set number of threads for inter-operator parallelism,
     # start with a single thread
-    #numInterOpThreads = 1
-    numInterOpThreads = 20
+    numInterOpThreads = 1
     
     # The total number of threads must be an integer multiple
     # of numInterOpThreads to make sure that all cores are used
-    #assert numThreads % numInterOpThreads == 0
+    assert numThreads % numInterOpThreads == 0
     
     # Compute the number of intra-operator threads; the number
     # of OpenMP threads for low-level libraries must be set to
     # the same value for optimal performance
-    #numIntraOpThreads = numThreads // numInterOpThreads
-    numIntraOpThreads = numThreads
+    numIntraOpThreads = numThreads // numInterOpThreads
     os.environ['OMP_NUM_THREADS'] = str(numIntraOpThreads)
 
-#import json
-#import sys
+
 import tensorflow as tf
 import tensorflow_datasets as tfds
-#import numpy as np
-#import matplotlib.pyplot as plt
 
 # Set the random seed for reproducability
 tf.random.set_seed(43)
@@ -243,11 +237,15 @@ if dataset_name == 'MNIST':
     ds_test = ds_test.cache()
     ds_test = ds_test.prefetch(tf.data.experimental.AUTOTUNE)
     
-elif dataset_name == 'ImageNet':
+elif dataset_name == 'ImageNet' or dataset_name == 'ImageNet_subset':
     # Load the dataset from <imagenet_dir>/imagenet2012/5.1.0
     imagenet_dir = data_path  # <imagenet_dir> from above path
+    if dataset_name == 'ImageNet':
+        data_name = 'imagenet2012'
+    else:
+        data_name = 'imagenet2012_subset/10pct'
     # imagenet_dir = '/lustre/cmsc714-1ves/datasets/TF_ImageNet'  # Example for HPC
-    ds_train, ds_test = tfds.load('imagenet2012',                 # Define the dataset
+    ds_train, ds_test = tfds.load(data_name,                      # Define the dataset
                                   split=['train','validation'],   # Define how to split the dataset
                                   data_dir = imagenet_dir,        # Point to downloaded files
                                   as_supervised=True,             # State whether dataset is supervised; (features, label)
@@ -284,7 +282,7 @@ elif dataset_name == 'ImageNet':
 if dataset_name == 'MNIST':
     input_shape = (32,32,1)
     include_top = False
-elif dataset_name == 'ImageNet':
+elif dataset_name == 'ImageNet' or dataset_name == 'ImageNet_subset':
     input_shape = (224,224,3)
     include_top = True
     

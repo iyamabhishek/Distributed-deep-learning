@@ -1,6 +1,5 @@
 .spyproject
 datasets/TF_MNIST
-batch_jobs
 results
-*.sh
 *.out
+ziemann_job_scripts
